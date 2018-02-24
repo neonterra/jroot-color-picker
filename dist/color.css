@@ -1,0 +1,184 @@
+jroot-color-picker {
+    position: absolute;
+    right: 15px;
+    top: 52px;
+    background: #fff;
+    width: 300px;
+    height: 300px;
+    z-index: 999219;
+    box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.11);
+    border-radius: 8px;
+}
+
+jroot-color-picker heading {
+    float: left;
+    width: 100%;
+    padding: 5px 5px;
+    background: #029688;
+    color: #fff;
+    position: relative;
+}
+
+jroot-color-picker heading label {
+    margin-bottom: 0px;
+    float: left;
+    width: 100%;
+    padding-left: 5px;
+}
+
+jroot-color-picker heading controll {
+    position: absolute;
+    right: 15px;
+}
+
+jroot-color-picker heading controll icon {
+    cursor: pointer;
+}
+
+jroot-color-picker el-block {
+    float: left;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 34px;
+    z-index: 999;
+    background: #fff;
+    padding: 3px 10px;
+}
+pallet-block {
+    position: absolute;
+    left: -146px;
+    width: 160px;
+    height: 266px;
+    background: #ffffff;
+    border-radius: 10px 0 0px 10px;
+    top: 34px;
+    z-index: 991;
+    box-shadow: -2px 6px 6px 2px rgba(0, 0, 0, 0.07);
+    padding-right: 14px;
+}
+
+pallet-block label {
+    float: left;
+    width: 100%;
+    padding: 4px 7px;
+    background: #029688;
+    color: #fff;
+    border-radius: 10px 0 0 0;
+    margin-bottom: 0px;
+}
+
+pallet-block > ul {
+    padding: 5px 10px;
+    margin: 0px;
+    float: left;
+    width: 100%;
+    max-height: 233px;
+    overflow-y: auto;
+}
+
+pallet-block > ul > li {
+    float: left;
+    width: 100%;
+    list-style: none;
+    padding: 3px 0;
+}
+
+pallet-block > ul > li > span {
+    width: 20%;
+    float: left;
+    height: 20px;
+}
+
+pallet-block > ul::-webkit-scrollbar-track{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+	background-color: #F5F5F5;
+}
+
+pallet-block > ul::-webkit-scrollbar{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+pallet-block > ul::-webkit-scrollbar-thumb{
+	background-color: #2486bc;
+	border: 1px solid #2486bc;
+}
+pallet-block > ul > li:hover{
+	border:2px solid rgba(0,0,0,0);
+}
+jroot-color-picker el-block change-pallet {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #f7f7f7;
+    position: relative;
+    padding-bottom: 6px;
+    padding-top: 4px;
+}
+
+jroot-color-picker el-block change-pallet label {
+    float: left;
+    width: 100%;
+    margin-bottom: 0px;
+    font-size: 0.9em;
+}
+
+jroot-color-picker el-block change-pallet icon {
+    position: absolute;
+    right: 8px;
+    font-size: 0.8em;
+    color: #5ad6ef;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+active-pallet {
+    float: left;
+    width: 100%;
+    height: 190px;
+    padding: 5px 5px;
+}
+active-pallet ul {
+    float: left;
+    width: 20%;
+    margin: 0px;
+    padding: 0px;
+}
+
+active-pallet ul li {
+    list-style: none;
+    width: 100%;
+    height: 30px;
+    cursor: pointer;
+}
+active-pallet ul li:hover{
+	zoom:1.1;
+}
+
+jroot-color-picker el-block change-pallet color-block {
+    width: 85px;
+    height: 25px;
+    background: red;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+}
+
+action-buttons {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35px;
+}
+
+action-buttons button {
+    float: right;
+    padding: 0px 12px !important;
+    border-radius: 0px !important;
+    margin-right: 10px;
+    font-size: 0.8em !important;
+}
