@@ -1,5 +1,5 @@
 jroot-color-picker {
-    position: absolute;
+    position: fixed;
     right: 15px;
     top: 52px;
     background: #fff;

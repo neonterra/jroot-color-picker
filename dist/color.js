@@ -36,7 +36,37 @@ $.widget( "jroot.colorpicker", {
 	activeSelector : null , 
 	/* jrootColorPicker */
 	_create: function() {
+		console.log('fn loaded');
 		var thisR = this;
+		this.activeSelector = this;
+		$(document).on('click','pallet-block > ul > li', function (){
+			var x = $(this).attr('data-target');
+			var colorPallets = thisR._getColorPallets() ;
+			var activeColorPalletsSlots = thisR._activePallet(colorPallets[x]);
+			$('active-pallet').html(activeColorPalletsSlots);
+		});
+		
+		$(document).on('click','active-pallet ul li', function (){
+			var x = $(this).attr('data-color');
+			thisR._setColor(x); 
+			$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',x);
+			thisR._trigger( "pick", null, thisR.getColor() );
+		});
+		$(document).on('mouseover','active-pallet ul li', function (){
+			var x = $(this).attr('data-color');
+			thisR._trigger( "over", null, thisR.getColor());
+		});
+		
+		$(document).on('click','*[data-roll="jroot-color-picker-close"]', function (){
+			$('jroot-color-picker').remove();
+			thisR._trigger( "change", null, thisR.getColor() );
+		});
+		
+    },
+	_init : function (){
+		this.run();
+	},
+	run: function (){
 		var colorPallets = this._getColorPallets() ;
 		colorPalletsList = '' ;
 		for(var i = 0 ; i < 100 ; i++){
@@ -78,32 +108,8 @@ $.widget( "jroot.colorpicker", {
 					'</pallet-block>'+
 				'</jroot-color-picker>';
 		this.element.append(h);
-		this.activeSelector = this;
-		$(document).on('click','pallet-block > ul > li', function (){
-			var x = $(this).attr('data-target');
-			var colorPallets = this._getColorPallets() ;
-			activeColorPalletsSlots = thisR._activePallet(thisR.colorPallets[x]);
-			$('active-pallet').html(activeColorPalletsSlots);
-		});
-		
-		$(document).on('click','active-pallet ul li', function (){
-			var x = $(this).attr('data-color');
-			thisR._setColor(x); 
-			$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',x);
-			thisR._trigger( "pick", null, thisR.getColor() );
-		});
-		$(document).on('mouseover','active-pallet ul li', function (){
-			var x = $(this).attr('data-color');
-			thisR._setColor(x); 
-			thisR._trigger( "over", null, thisR.getColor());
-		});
-		
-		$(document).on('click','*[data-roll="jroot-color-picker-close"]', function (){
-			$('jroot-color-picker').remove();
-			thisR._trigger( "change", null, thisR.getColor() );
-		});
-		
-    },
+	},
+	
 	getColor : function (){
 		return this.activeColor ;
 	},
