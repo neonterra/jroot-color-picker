@@ -137,7 +137,7 @@ jroot-color-picker el-block change-pallet icon {
 active-pallet {
     float: left;
     width: 100%;
-    height: 190px;
+    height: 130px;
     padding: 5px 5px;
 }
 active-pallet ul {
@@ -150,7 +150,7 @@ active-pallet ul {
 active-pallet ul li {
     list-style: none;
     width: 100%;
-    height: 30px;
+    height: 25px;
     cursor: pointer;
 }
 active-pallet ul li:hover{
@@ -181,4 +181,50 @@ action-buttons button {
     border-radius: 0px !important;
     margin-right: 10px;
     font-size: 0.8em !important;
+}
+manual-color {
+    float: left;
+    width: 100%;
+    padding: 5px 5px;
+    margin-top: 10px;
+}
+
+manual-color .code-code {
+    float: left;
+    width: 60%;
+    padding-right: 10px;
+}
+
+manual-color .code-code label {
+    float: left;
+    width: 100%;
+    font-size: 0.9em;
+    font-weight: 400;
+    letter-spacing: 0.9px;
+}
+
+manual-color .code-code input {
+    float: left;
+    width: 100%;
+    border: 1px solid #d6d6d6;
+    padding: 3px 5px;
+    border-radius: 3px;
+}
+
+manual-color .code-code .ui-slider {
+    float: left;
+    width: 100%;
+    margin-top: 7px;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(0,0,0,1) 100%);
+    border-radius: 3px;
+}
+
+manual-color .code-code .ui-slider span.ui-slider-handle {
+    border-radius: 10px;
+    outline:unset;
+    background: #033649;
+    border: none;
+}
+manual-color .code-code:last-child {
+    width: 40%;
 }

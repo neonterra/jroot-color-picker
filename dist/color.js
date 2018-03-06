@@ -26,6 +26,8 @@ $.widget( "jroot.colorpicker", {
         // Default options
 		zIndex: false,
 		position: 'middle-right',
+		setColor: null,
+		alpha: 1,
 		
 		// callbacks
 		change: null,
@@ -44,13 +46,64 @@ $.widget( "jroot.colorpicker", {
 			var colorPallets = thisR._getColorPallets() ;
 			var activeColorPalletsSlots = thisR._activePallet(colorPallets[x]);
 			$('active-pallet').html(activeColorPalletsSlots);
+			
 		});
 		
+		$(document).on('keyup , change , past','*[name="manual-color"]', function (){
+			var x = $(this).val();
+			if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(x)){
+				thisR._setColor(x); 
+				$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',x);
+				thisR._trigger( "pick", null, thisR.getColor() );
+				$('*[name="manual-color"]').val(thisR.getColor());
+				$( "#color-alpha" ).slider( "option", "value" , 1 );
+				var newAlpha = 1;
+				var bg = thisR._hexToRgbA(thisR.getColor());
+				var a = bg.split(',');
+				console.log(a);
+				var newBg ='rgba('+parseInt(a[0])+','+parseInt(a[1])+','+parseInt(a[2])+','+newAlpha+')' ;
+				console.log('linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
+				$( "manual-color .code-code .ui-slider" ).add().css('background' , 'linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
+			}else if(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/.test(x)){
+				thisR._setColor(x); 
+				$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',x);
+				thisR._trigger( "pick", null, thisR.getColor() );
+				$('*[name="manual-color"]').val(thisR.getColor());
+				var newAlpha = 1;
+				var bg = thisR.getColor();
+				console.log('bg-bfore' , bg);
+				var bg = bg.replace("r", "");
+				var bg = bg.replace("g", "");
+				var bg = bg.replace("b", "");
+				var bg = bg.replace("a", "");
+				var bg = bg.replace("(", "");
+				var bg = bg.replace(")", "");
+				console.log('bg' , bg);
+				var a = bg.split(',');
+				console.log(a);
+				if(a.length == 3){
+					
+				}else if(a.length == 4){
+					newAlpha = parseFloat(a[3]);
+				}
+				var newBg ='rgba('+parseInt(a[0])+','+parseInt(a[1])+','+parseInt(a[2])+',1)' ;
+				console.log('linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
+				$( "#color-alpha" ).slider( "option", "value" , newAlpha );
+				$( "manual-color .code-code .ui-slider" ).add().css('background' , 'linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
+			}
+		});
 		$(document).on('click','active-pallet ul li', function (){
 			var x = $(this).attr('data-color');
 			thisR._setColor(x); 
 			$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',x);
 			thisR._trigger( "pick", null, thisR.getColor() );
+			$('*[name="manual-color"]').val(thisR.getColor());
+			$( "#color-alpha" ).slider( "option", "value" , 1 );
+			var newAlpha = 1;
+			var bg = thisR._hexToRgbA(thisR.getColor());
+			var a = bg.split(',');
+			var newBg ='rgba('+parseInt(a[0])+','+parseInt(a[1])+','+parseInt(a[2])+','+newAlpha+')' ;
+			$( "manual-color .code-code .ui-slider" ).add().css('background' , 'linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
 		});
 		$(document).on('mouseover','active-pallet ul li', function (){
 			var x = $(this).attr('data-color');
@@ -59,7 +112,22 @@ $.widget( "jroot.colorpicker", {
 		
 		$(document).on('click','*[data-roll="jroot-color-picker-close"]', function (){
 			$('jroot-color-picker').remove();
-			thisR._trigger( "change", null, thisR.getColor() );
+			if(thisR.getColor().indexOf('rgb') !== -1){
+				var newAlpha = thisR.options.alpha;
+				console.log(thisR.getColor());
+				var bg = thisR.getColor();
+				bg = bg.replace('rgba', '');
+				console.log(bg);
+				var a = bg.split(',');
+				var newBg = bg.replace('rgba', '');
+				var newBg ='rgba('+a[0]+','+parseInt(a[1])+','+parseInt(a[2])+','+newAlpha+')' ;
+				var newBg = newBg.replace('((', '(');
+				console.log(newBg);
+				thisR._trigger( "change", null, newBg );
+			}else{
+				thisR._trigger( "change", null, thisR.getColor() );
+			}
+			
 		});
 		
     },
@@ -67,6 +135,7 @@ $.widget( "jroot.colorpicker", {
 		this.run();
 	},
 	run: function (){
+		console.log(this.options.setColor);
 		var colorPallets = this._getColorPallets() ;
 		colorPalletsList = '' ;
 		for(var i = 0 ; i < 100 ; i++){
@@ -80,6 +149,14 @@ $.widget( "jroot.colorpicker", {
 		var activeColorPalletsSlots = '' ;
 		var p = colorPallets[0];
 		activeColorPalletsSlots = this._activePallet(p);
+		var mC = '';
+		var mCVal = '';
+		console.log('this.setColor' , this.options.setColor);
+		if(this.options.setColor != null){
+			mC = 'background-color:' + this.options.setColor+ ';' ;
+			mCVal = this._rgb2hex( this.options.setColor );
+			console.log(mCVal);
+		}
 		var h = '<jroot-color-picker class="jroot-color-picker '+this.options.position+'">'+
 					'<heading>'+
 						'<label>Color Editor</label>'+
@@ -90,11 +167,21 @@ $.widget( "jroot.colorpicker", {
 					'<el-block>'+
 						'<change-pallet>'+
 							'<label>Selected Color</label>'+
-							'<color-block></color-block>'+
+							'<color-block style="'+mC+'"></color-block>'+
 						'</change-pallet>'+
 						'<active-pallet>'+
 							activeColorPalletsSlots + 
 						'</active-pallet>'+
+						'<manual-color>'+
+							'<div class="code-code">'+
+								'<label>Color Code</label>'+
+								'<input type="text" name="manual-color" value="'+mCVal+'"/>'+
+							'</div>'+
+							'<div class="code-code">'+
+								'<label>Transparency</label>'+
+								'<div id="color-alpha"></div>'+
+							'</div>'+
+						'</manual-color>'+
 						'<action-buttons>'+
 							'<button class="btn btn-success" data-roll="jroot-color-picker-close">Change</button>'+
 							'<button class="btn btn-primary" data-roll="jroot-color-picker-close">Cancel</button>'+
@@ -108,6 +195,53 @@ $.widget( "jroot.colorpicker", {
 					'</pallet-block>'+
 				'</jroot-color-picker>';
 		this.element.append(h);
+		var thisR = this;
+		var newAlpha = 1 ; 
+		var newBg = 'rgba(0,0,0,1)';
+		if(thisR.options.setColor.indexOf('rgb') !== -1){
+			var bg = thisR.options.setColor;
+			
+			var bg = bg.replace("r", "");
+			var bg = bg.replace("g", "");
+			var bg = bg.replace("b", "");
+			var bg = bg.replace("a", "");
+			var bg = bg.replace("(", "");
+			var bg = bg.replace(")", "");
+			var a = bg.split(',');
+			console.log(a);
+			if(a.length == 3){
+				
+			}else if(a.length == 4){
+				newAlpha = parseFloat(a[3]);
+			}
+			var newBg ='rgba('+parseInt(a[0])+','+parseInt(a[1])+','+parseInt(a[2])+','+newAlpha+')' ;
+			$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',newBg);
+		}else{
+			$('jroot-color-picker el-block change-pallet color-block').add().css('background-color',thisR.options.setColor);
+		}
+		
+		$( "#color-alpha" ).slider({
+		  min: 0.0,
+		  step: 0.1,
+		  value: newAlpha,
+		  max: 1.0,
+		  animate: "fast",
+		  create: function( event, ui ) {
+			 $( "manual-color .code-code .ui-slider" ).add().css('background' , 'linear-gradient(to right, rgba(255,255,255,0) 0%, '+newBg+' 100%)');
+		  },
+		  slide: function( event, ui ) {
+			console.log(ui.value);
+			thisR.options.alpha = ui.value;
+			var newAlpha = ui.value;
+			var bg = $('color-block').css('background-color');
+			var a = bg.slice(4).split(',');
+			var newBg ='rgba('+a[0]+','+parseInt(a[1])+','+parseInt(a[2])+','+newAlpha+')' ;
+			var newBg = newBg.replace('((', '(');
+			$('color-block').add().css('background-color',newBg);
+			thisR._setColor(newBg)
+			//$('*[name="manual-color"]').val(newBg);
+		  }
+		});
 	},
 	
 	getColor : function (){
@@ -153,7 +287,14 @@ $.widget( "jroot.colorpicker", {
 			c= '0x'+c.join('');
 			return [(c>>16)&255, (c>>8)&255, c&255].join(',');
 		}
-		throw new Error('Bad Hex');
+		//throw new Error('Bad Hex');
+	},
+	_rgb2hex : function (rgb){
+		rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+		return (rgb && rgb.length === 4) ? "#" +
+		("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+		("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+		("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
 	},
 	_shadeColor : function (color, percent) {
 		var R = parseInt(color.substring(1,3),16);
@@ -173,5 +314,14 @@ $.widget( "jroot.colorpicker", {
 		var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
 
 		return "#"+RR+GG+BB;
+	},
+	_rand : function (len) {
+		var x = 10;
+		if(len){ x = len; }
+		var text = "";
+		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (var i = 0; i < x; i++)
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+		return text;
 	}
 });
